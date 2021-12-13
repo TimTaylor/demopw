@@ -1,0 +1,45 @@
+---
+title: "NHS 111 Covid triages"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## packages
+```{r}
+library(data.table)
+library(ggplot2)
+library(grates)
+```
+
+## filter to full weeks
+```{r}
+wd <- setNames(1:7, weekdays(as.Date("2021-12-06") + 0:6))
+f <- max(list.files("../data/clean/", full.names = TRUE))
+dat <- fread(f)
+fd <- weekdays(max(dat$date + 1L))
+fd <- wd[fd]
+dat <- dat[NHSER21NM !="" & type != "999", week:=as_yearweek(as.Date(date), firstday=fd)]
+```
+
+## calculate regional totals
+```{r}
+regions_weekly <- dat[,wdays:=uniqueN(date), by=c("week", "NHSER21NM", "type")]
+regions_weekly <- regions_weekly[wdays==7]
+regions_weekly <- regions_weekly[, .(total=sum(count)), by=c("week", "NHSER21NM", "type")]
+```
+
+## plot
+```{r, out.width = "100%",}
+ggplot(regions_weekly, aes(week, total)) +
+  geom_col() +
+  scale_x_grates_yearweek(firstday = fd) +
+  facet_wrap(vars(NHSER21NM), ncol = 3L) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust=1),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank())
+```
+
