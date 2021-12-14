@@ -10,7 +10,7 @@ data/clean/2021-12-07.csv: scripts/clean-data.R $(PATHWAYS) $(NHSONLINE) $(LOOKU
 	@echo -e "\n--- Cleaning data ---\n"
 	podman run --rm -v $(WORKDIR):/home/demopw:z demopw Rscript $^ $@
 
-reports/demo1.html: reports/demo1.Rmd clean-data build
+reports/demo1.html: reports/demo1.Rmd clean-data
 	@echo -e "\n--- Compiling report ---\n"
 	podman run --rm -v $(WORKDIR):/home/demopw:z demopw R -s -e "rmarkdown::render('reports/demo1.Rmd', output_dir='reports')"
 
