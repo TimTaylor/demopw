@@ -23,4 +23,6 @@ RUN dnf -y install texlive-endfloat texlive-todonotes texlive-lastpage texlive-m
 RUN mkdir /home/demopw
 WORKDIR /home/demopw
 
+LABEL org.opencontainers.image.source="https://github.com/timtaylor/demopw"
+
 CMD ["bash"]
