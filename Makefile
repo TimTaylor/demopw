@@ -1,4 +1,4 @@
-WORKDIR = /home/tim/github/timtaylor/demo3
+WORKDIR = /home/tim/demopw
 PATHWAYS = data/raw/2021-12-07-pathways.csv
 NHSONLINE = data/raw/2021-12-07-nhs-111-online.csv
 LOOKUPS = data/lookups/ccg_to_region.csv
